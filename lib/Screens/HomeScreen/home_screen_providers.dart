@@ -32,7 +32,9 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
   Future<ComputerData> build() async {
     final socket = ref.watch(computerSocketStreamProvider);
     isConnected = ref.watch(isConnectedProvider);
-    ref.read(timerProvider);
+    if ((ref.read(timerProvider).value ?? 0) <= 3) {
+      ref.watch(timerProvider);
+    }
     final streamData = socket.value;
     if (isConnected == false) {
       return attemptToReturnOldData(NotConnectedToSocketException());

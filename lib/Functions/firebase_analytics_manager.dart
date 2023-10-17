@@ -9,13 +9,7 @@ class AnalyticsManager {
   }
 
   static Future<void> logScreenView(String name) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: 'screen_view',
-      parameters: {
-        'firebase_screen': name,
-        'firebase_screen_class': name,
-      },
-    );
+    await FirebaseAnalytics.instance.setCurrentScreen(screenName: name);
   }
 
   static Future<void> logEvent(

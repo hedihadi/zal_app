@@ -41,13 +41,9 @@ class AuthorizedScreen extends ConsumerWidget {
             PremiumButton(),
           ],
         ),
-        actions: [
-          const StressTestButton(),
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TaskManagerScreen()));
-              },
-              icon: const Icon(FontAwesomeIcons.list))
+        actions: const [
+          StressTestButton(),
+          TaskmanagerButton(),
         ],
       ),
       body: widgets[index],
@@ -148,5 +144,22 @@ class PremiumButton extends ConsumerWidget {
           });
         },
         icon: const Icon(FontAwesomeIcons.crown));
+  }
+}
+
+class TaskmanagerButton extends ConsumerWidget {
+  const TaskmanagerButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final computerSocket = ref.watch(socketProvider);
+    if (ref.read(socketProvider.notifier).isProgramRunningAsAdminstrator) {
+      return IconButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TaskManagerScreen()));
+          },
+          icon: const Icon(FontAwesomeIcons.list));
+    }
+    return Container();
   }
 }

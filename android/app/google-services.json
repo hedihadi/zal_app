@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "833574767925",
+    "project_id": "zal1-353509",
+    "storage_bucket": "zal1-353509.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833574767925:android:e05ba46c9d39431b5ad07c",
+        "android_client_info": {
+          "package_name": "com.hedihadi.zal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833574767925-qlakif91bqbf8o5u1oin564ojee3qlqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSj8N7DH3jtMOAa4hd7ytqMq2H_8iprmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833574767925-qlakif91bqbf8o5u1oin564ojee3qlqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

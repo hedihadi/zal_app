@@ -125,9 +125,6 @@ final computerSocketStreamProvider = StreamProvider<StreamData>((ref) async* {
     socket.socket.on('fps_data', (data) {
       stream.add(StreamData(type: StreamDataType.FPS, data: data));
     });
-    socket.socket.on('fps_processes', (data) {
-      stream.add(StreamData(type: StreamDataType.FpsProcesses, data: data));
-    });
     socket.socket.on('room_clients', (data) {
       stream.add(StreamData(type: StreamDataType.RoomClients, data: data));
     });

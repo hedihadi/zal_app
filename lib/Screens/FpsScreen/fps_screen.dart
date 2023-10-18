@@ -4,14 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/FpsScreen/Widgets/chart.dart';
+import 'package:zal/Screens/FpsScreen/Widgets/fps_help_widget.dart';
 import 'package:zal/Screens/FpsScreen/Widgets/fps_presets_widget.dart';
 import 'package:zal/Screens/FpsScreen/Widgets/save_fps_widget.dart';
 import 'package:zal/Screens/FpsScreen/fps_screen_providers.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
 import 'package:sizer/sizer.dart';
 import 'package:zal/Widgets/inline_ad.dart';
-
-import 'package:zal/Widgets/title_widget.dart';
 
 import '../../Functions/firebase_analytics_manager.dart';
 
@@ -28,36 +27,24 @@ class FpsScreen extends ConsumerWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text("FPS Counter")),
+        appBar: AppBar(
+          title: const Text("FPS Counter"),
+          actions: const [FpsHelpWidget()],
+        ),
         body: fpsData.when(
           skipLoadingOnReload: true,
           data: (data) {
             return ListView(
               shrinkWrap: true,
               children: [
-                const TitleWidget("choose the game process"),
-                SizedBox(
-                  height: 10.h,
-                  child: ListView.builder(
-                    itemCount: data.processNames.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final processName = data.processNames.toList()[index];
-                      return GestureDetector(
-                        onTap: () {
-                          ref.read(fpsDataProvider.notifier).chooseProcessName(processName);
-                        },
-                        child: Card(
-                          color: data.chosenProcessName == processName ? Theme.of(context).primaryColor : null,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.w),
-                            child: Center(child: Text(processName)),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                SizedBox(height: 2.h),
+                data.processName == null
+                    ? Container()
+                    : Text(
+                        "${data.processName}",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                 Card(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),

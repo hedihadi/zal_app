@@ -14,7 +14,7 @@ enum SortBy { Name, Memory, Cpu }
 
 enum DataType { Hardwares, TaskManager }
 
-enum StreamDataType { FPS, DATA, FpsProcesses, RoomClients, DiskData }
+enum StreamDataType { FPS, DATA, RoomClients, DiskData }
 
 enum QrCodeSwitchState { camera, text }
 
@@ -28,7 +28,7 @@ class StreamData {
 }
 
 class FpsData {
-  List<String> processNames;
+  String? processName;
   String? chosenProcessName;
   List<double> fpsList;
   double fps;
@@ -36,7 +36,7 @@ class FpsData {
   double fps001Low;
   Timestamp timestamp;
   FpsData({
-    required this.processNames,
+    required this.processName,
     required this.chosenProcessName,
     required this.fpsList,
     required this.fps,
@@ -46,7 +46,7 @@ class FpsData {
   });
 
   FpsData copyWith({
-    List<String>? processNames,
+    String? processName,
     String? chosenProcessName,
     List<double>? fpsList,
     double? fps,
@@ -56,7 +56,7 @@ class FpsData {
     Timestamp? timestamp,
   }) {
     return FpsData(
-      processNames: processNames ?? this.processNames,
+      processName: processName ?? this.processName,
       chosenProcessName: chosenProcessName ?? this.chosenProcessName,
       fpsList: fpsList ?? this.fpsList,
       fps: fps ?? this.fps,

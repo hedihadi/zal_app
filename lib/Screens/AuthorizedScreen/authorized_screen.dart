@@ -22,7 +22,7 @@ final bottomNavigationbarIndexProvider = StateProvider((ref) => 0);
 
 class AuthorizedScreen extends ConsumerWidget {
   AuthorizedScreen({super.key});
-  List<Widget> widgets = [
+  final List<Widget> widgets = [
     const HomeScreen(),
     const CanRunGameScreen(),
     const AccountScreen(),

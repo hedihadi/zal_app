@@ -11,10 +11,11 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
   Future<FpsData> _fetchData(FpsData fpsData, String data) async {
     final uncompressedString = decompressGzip(data);
     final parsedData = jsonDecode(uncompressedString);
+    String? processName;
     for (final string in parsedData) {
       final parsedString = Map<String, dynamic>.from(jsonDecode(string)).entries.first;
+      processName = parsedString.key;
       final msBetweenDisplayChange = double.parse(parsedString.value);
-      final processName = parsedString.key;
       if (fpsData.chosenProcessName != null && fpsData.chosenProcessName == processName) {
         fpsData.fpsList.add((1000 / msBetweenDisplayChange).toPrecision(2));
       } else {
@@ -29,18 +30,8 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
     double totalFPS = fpsData.fpsList.reduce((a, b) => a + b);
     double averageFPS = totalFPS / fpsData.fpsList.length;
 
-    return fpsData.copyWith(fps: averageFPS.toPrecision(2), fps01Low: fps1Percent.toPrecision(2), fps001Low: fps01Percent.toPrecision(2));
-  }
-
-  void chooseProcessName(String name) {
-    ref.read(socketObjectProvider.notifier).state!.sendData('start_fps', name);
-    state = AsyncData(state.value!.copyWith(chosenProcessName: name));
-  }
-
-  FpsData fetchProcesses(FpsData fpsData, String data) {
-    final uncompressedString = decompressGzip(data);
-    final parsedData = List<String>.from(jsonDecode(uncompressedString));
-    return fpsData.copyWith(processNames: parsedData);
+    return fpsData.copyWith(
+        processName: processName, fps: averageFPS.toPrecision(2), fps01Low: fps1Percent.toPrecision(2), fps001Low: fps01Percent.toPrecision(2));
   }
 
   void reset() {
@@ -64,7 +55,7 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
     final streamData = socket.value;
     final FpsData fpsData = state.value ??
         FpsData(
-          processNames: [],
+          processName: null,
           chosenProcessName: null,
           fpsList: [],
           fps: 0,
@@ -73,11 +64,8 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
           timestamp: Timestamp.now(),
         );
 
-    if (streamData!.type == StreamDataType.DATA) {
-      return fpsData;
-    }
-    if (streamData.type == StreamDataType.FpsProcesses) {
-      return fetchProcesses(fpsData, streamData.data);
+    if (streamData!.type != StreamDataType.FPS) {
+      return state.value ?? fpsData;
     }
 
     return _fetchData(fpsData, streamData.data);
@@ -88,9 +76,8 @@ final fpsDataProvider = AsyncNotifierProvider.autoDispose<FpsDataNotifier, FpsDa
   return FpsDataNotifier();
 });
 
-class FpsPresetsNotifier extends StateNotifier<List<FpsPreset>> {
-  // We initialize the list of todos to an empty list
-  FpsPresetsNotifier() : super([]);
+class FpsRecordsNotifier extends StateNotifier<List<FpsPreset>> {
+  FpsRecordsNotifier() : super([]);
   void addPreset(FpsData fpsData, String presetName, String? note) {
     state = [
       FpsPreset(
@@ -107,6 +94,6 @@ class FpsPresetsNotifier extends StateNotifier<List<FpsPreset>> {
   }
 }
 
-final fpsPresetsProvider = StateNotifierProvider<FpsPresetsNotifier, List<FpsPreset>>((ref) {
-  return FpsPresetsNotifier();
+final fpsPresetsProvider = StateNotifierProvider<FpsRecordsNotifier, List<FpsPreset>>((ref) {
+  return FpsRecordsNotifier();
 });

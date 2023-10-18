@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sizer/sizer.dart';
 
 class ManualLoginNotifier extends AsyncNotifier {
@@ -21,6 +22,7 @@ class ManualLoginNotifier extends AsyncNotifier {
         return;
       }
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      await Purchases.setEmail(email);
     } on FirebaseAuthException catch (c) {
       state = AsyncError(c.message.toString(), StackTrace.current);
       return;

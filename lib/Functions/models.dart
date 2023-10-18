@@ -528,8 +528,8 @@ class SocketObject {
   Timer? timer;
   SocketObject(String uid, String idToken) {
     socket = io(
-      'https://api.zalapp.com',
-      //'http://192.168.0.112:5000',
+      //'https://api.zalapp.com',
+      'http://192.168.0.112:5000',
       <String, dynamic>{
         'transports': ['websocket'],
         'query': {

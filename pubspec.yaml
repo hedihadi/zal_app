@@ -50,7 +50,7 @@ dependencies:
   flutter_markdown: ^0.6.14
   assorted_layout_widgets: ^8.0.4
   uni_links: ^0.5.1
-  socket_io_client: ^1.0.2
+  socket_io_client: ^2.0.3+1
   syncfusion_flutter_charts: ^21.2.4
   syncfusion_flutter_gauges: ^21.2.4
   flutter_archive: ^5.0.0

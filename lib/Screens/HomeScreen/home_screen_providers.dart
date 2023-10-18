@@ -58,6 +58,7 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
             //if program is running as adminstrator, that means we have all the data available, let's save it.
             ref.read(computerSpecsProvider.notifier).saveSettings(data);
           }
+          isComputerConnected = true;
           return data;
         } on Exception {
           throw ErrorParsingComputerData(streamData.data);

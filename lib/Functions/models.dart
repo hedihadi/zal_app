@@ -158,7 +158,7 @@ class ComputerData {
   late List<Monitor> monitors;
   late Motherboard motherboard;
   late Battery battery;
-  late List<TaskmanagerProcess>? taskmanagerProcesses;
+  List<TaskmanagerProcess>? taskmanagerProcesses;
   ComputerData();
 
   ComputerData.construct(String data) {

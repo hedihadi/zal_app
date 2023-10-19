@@ -12,11 +12,11 @@ class StorageErrorsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<String> transferMode = List<String>.from(storageInfo.info['transferMode']).map((e) => e.replaceAll(" ", "")).toList();
     final Map<String, dynamic>? uncorrectableSectorCount =
-        storageInfo.smartAttributes.firstWhereOrNull((element) => element['attributeName'] == 'Uncorrectable Sector Count');
-    final Map<String, dynamic>? currentPendingSectorCount =
-        storageInfo.smartAttributes.firstWhereOrNull((element) => element['attributeName'] == 'Current Pending Sector Count');
+        storageInfo.smartAttributes?.firstWhereOrNull((element) => element['attributeName'] == 'Uncorrectable Sector Count');
+    //final Map<String, dynamic>? currentPendingSectorCount =
+    //    storageInfo.smartAttributes?.firstWhereOrNull((element) => element['attributeName'] == 'Current Pending Sector Count');
     final Map<String, dynamic>? reallocatedSectorsCount =
-        storageInfo.smartAttributes.firstWhereOrNull((element) => element['attributeName'] == 'Reallocated Sectors Count');
+        storageInfo.smartAttributes?.firstWhereOrNull((element) => element['attributeName'] == 'Reallocated Sectors Count');
     return ListView(
       shrinkWrap: true,
       children: [

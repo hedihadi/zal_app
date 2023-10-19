@@ -13,7 +13,7 @@ class StorageInformationWidget extends ConsumerWidget {
   final StorageInfo storageInfo;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ssdWrite = storageInfo.smartAttributes.firstWhereOrNull((element) => element['attributeName'] == "Host Writes");
+    final ssdWrite = storageInfo.smartAttributes?.firstWhereOrNull((element) => element['attributeName'] == "Host Writes");
     //final hddWrite = storageInfo.smartAttributes.firstWhereOrNull((element) => element['attributeName'] == "Total Host Writes");
     final healthPercentage = storageInfo.info.entries.firstWhereOrNull((element) => element.key == "healthPercentage")?.value;
     final healthText = storageInfo.info.entries.firstWhereOrNull((element) => element.key == "healthText")?.value;

@@ -12,7 +12,7 @@ import 'package:upgrader/upgrader.dart';
 import 'package:zal/Screens/MainScreen/main_screen.dart';
 import 'Functions/theme.dart';
 
-final _revenueCatConfiguration = PurchasesConfiguration(Platform.isAndroid ? 'goog_xokAwGykaqKIgLAIODrNHTTMnxF' : 'appl_KLMJitMXiVyfCrgZZdUnQGtWiSX');
+final _revenueCatConfiguration = PurchasesConfiguration(Platform.isAndroid ? 'goog_xokAwGykaqKIgLAIODrNHTTMnxF' : 'appl_eqiIImrSxvAweggWipqxMOgYidj');
 Future<void> main() async {
   //initializations
   WidgetsFlutterBinding.ensureInitialized();

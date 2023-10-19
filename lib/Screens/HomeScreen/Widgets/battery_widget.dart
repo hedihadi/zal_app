@@ -48,9 +48,11 @@ class BatteryWidget extends ConsumerWidget {
                               context,
                               "",
                               FontAwesomeIcons.clock,
-                              timeago
-                                  .format(DateTime.now().add(Duration(seconds: battery.lifeRemaining)), allowFromNow: true)
-                                  .replaceAll("from now", ""),
+                              battery.lifeRemaining == -1
+                                  ? "forever"
+                                  : timeago
+                                      .format(DateTime.now().add(Duration(seconds: battery.lifeRemaining)), allowFromNow: true)
+                                      .replaceAll("from now", ""),
                             ),
                             tableRow(
                               context,

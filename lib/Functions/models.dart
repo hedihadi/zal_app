@@ -197,27 +197,14 @@ class Battery {
     required this.hasBattery,
   });
 
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
-
-    result.addAll({'isCharging': isCharging});
-    result.addAll({'batteryPercentage': batteryPercentage});
-    result.addAll({'lifeRemaining': lifeRemaining});
-    result.addAll({'hasBattery': hasBattery});
-
-    return result;
-  }
-
   factory Battery.fromMap(Map<String, dynamic> map) {
     return Battery(
       isCharging: map['isCharging'] ?? false,
-      batteryPercentage: map['batteryPercentage']?.toInt() ?? 0,
+      batteryPercentage: map['life']?.toInt() ?? 0,
       lifeRemaining: map['lifeRemaining']?.toInt() ?? 0,
       hasBattery: map['hasBattery'] ?? false,
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory Battery.fromJson(String source) => Battery.fromMap(json.decode(source));
 }
@@ -755,7 +742,7 @@ class Settings {
 
 class StorageInfo {
   Map<String, dynamic> info;
-  List<Map<String, dynamic>> smartAttributes;
+  List<Map<String, dynamic>>? smartAttributes;
   StorageInfo({
     required this.info,
     required this.smartAttributes,
@@ -764,7 +751,7 @@ class StorageInfo {
   factory StorageInfo.fromMap(Map<String, dynamic> map) {
     return StorageInfo(
       info: Map<String, dynamic>.from(map['info']),
-      smartAttributes: List<Map<String, dynamic>>.from(map['smartAttributes']),
+      smartAttributes: map['smartAttributes'] == null ? null : List<Map<String, dynamic>>.from(map['smartAttributes']),
     );
   }
 

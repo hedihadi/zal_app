@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zal/Functions/models.dart';
@@ -38,7 +40,7 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
                 const StorageWidget(),
-                const InlineAd(adUnit: "ca-app-pub-5545344389727160/4695435315"),
+                InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/4695435315" : "ca-app-pub-5545344389727160/5860639295"),
               ],
             );
           },

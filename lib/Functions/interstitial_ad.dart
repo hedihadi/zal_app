@@ -21,7 +21,7 @@ class InterstitialAdNotifier extends StateNotifier<InterstitialAd?> {
     state = null;
 
     InterstitialAd.load(
-        adUnitId: Platform.isAndroid ? 'ca-app-pub-5545344389727160/8974425828' : 'ca-app-pub-5545344389727160/5990796267',
+        adUnitId: Platform.isAndroid ? 'ca-app-pub-5545344389727160/8974425828' : 'ca-app-pub-5545344389727160/7210198225',
         request: request,
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) async {

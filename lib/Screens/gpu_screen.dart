@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -139,7 +141,7 @@ class GpuScreen extends ConsumerWidget {
               ),
             ),
           ),
-          const InlineAd(adUnit: "ca-app-pub-5545344389727160/7822053264"),
+           InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
         ],
       ),
     );

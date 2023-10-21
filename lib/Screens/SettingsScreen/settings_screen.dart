@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zal/Functions/SettingsUI/section_setting_ui.dart';
 import 'package:zal/Functions/SettingsUI/switch_setting_ui.dart';
 import 'package:zal/Functions/firebase_analytics_manager.dart';
+import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
 import 'package:zal/Screens/LoginScreen/login_providers.dart';
 import 'package:zal/Screens/SettingsScreen/settings_providers.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,6 +53,30 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
+          ref.watch(socketProvider).value == null
+              ? Container()
+              : SectionSettingUi(children: [
+                  const Text("Select your primary GPU"),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: ref.watch(socketProvider).value!.gpus.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1.5),
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 5,
+                        shadowColor: Colors.transparent,
+                        child: Center(
+                          child: Text(
+                            ref.read(socketProvider).value!.gpus[index].name,
+                            maxLines: 2,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ]),
+          //MISC
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

@@ -18,7 +18,8 @@ class GpuScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final computerSocket = ref.watch(socketProvider);
     ref.read(screenViewProvider("gpu"));
-    final gpu = computerSocket.value!.gpu;
+    //TODO gpu
+    final gpu = computerSocket.value!.gpus[0];
     return Scaffold(
       appBar: AppBar(title: const Text("GPU")),
       body: ListView(
@@ -141,7 +142,7 @@ class GpuScreen extends ConsumerWidget {
               ),
             ),
           ),
-           InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
+          InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
         ],
       ),
     );

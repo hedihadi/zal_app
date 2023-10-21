@@ -43,7 +43,7 @@ class SpecsWidget extends ConsumerWidget {
                 height: 25,
               ),
               Icons.power,
-              data.gpuName,
+              data.gpusName.map((e) => "$e\n").toString(),
               addSpacing: true,
             ),
             tableRow(

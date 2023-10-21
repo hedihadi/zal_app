@@ -19,6 +19,10 @@ class GpuWidget extends ConsumerWidget {
     return computerSocket.when(
         skipLoadingOnReload: true,
         data: (data) {
+          final primaryGpu = ref.read(socketProvider.notifier).getPrimaryGpu();
+          if (primaryGpu == null) {
+            return const Text("no GPU");
+          }
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -49,35 +53,35 @@ class GpuWidget extends ConsumerWidget {
                                 context,
                                 "",
                                 FontAwesomeIcons.memory,
-                                (data.gpu.dedicatedMemoryUsed * 1024 * 1024).toSize(),
+                                (primaryGpu.dedicatedMemoryUsed * 1024 * 1024).toSize(),
                               ),
                               tableRow(
                                 context,
                                 "",
                                 FontAwesomeIcons.fan,
-                                "${data.gpu.fanSpeedPercentage.round()}%",
+                                "${primaryGpu.fanSpeedPercentage.round()}%",
                               ),
                               tableRow(
                                 context,
                                 "",
                                 Icons.power,
-                                "${data.gpu.power.round()}W",
+                                "${primaryGpu.power.round()}W",
                               ),
                             ],
                           ),
                           Text(
-                            getTemperatureText(data.gpu.temperature, ref),
-                            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: getTemperatureColor(data.gpu.temperature)),
+                            getTemperatureText(primaryGpu.temperature, ref),
+                            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: getTemperatureColor(primaryGpu.temperature)),
                           ),
                         ],
                       ),
                       const Divider(),
                       Row(
                         children: [
-                          Expanded(child: HorizontalCircleProgressBar(progress: data.gpu.corePercentage / 100)),
+                          Expanded(child: HorizontalCircleProgressBar(progress: primaryGpu.corePercentage / 100)),
                           SizedBox(width: 2.w),
                           Text(
-                            "${data.gpu.corePercentage.round()}%",
+                            "${primaryGpu.corePercentage.round()}%",
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ],

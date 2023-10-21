@@ -9,7 +9,25 @@ import 'package:zal/Functions/models.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
 
-final processIconProvider = StateProvider.family<Uint8List?, String>((ref, processName) => null);
+//this provider holds the data
+final _processIconProvider = StateProvider<Map<String, Uint8List>>((ref) => {});
+
+//this provider subscribes to new data
+final processIconProvider = StateProvider<Map<String, Uint8List>>((ref) {
+  final oldData = ref.read(_processIconProvider);
+  final socket = ref.watch(socketProvider);
+  final processes = socket.value?.taskmanagerProcesses;
+
+  if (processes != null) {
+    for (final process in processes) {
+      if (process.icon != null) {
+        oldData[process.name] = process.icon!;
+      }
+    }
+  }
+  ref.read(_processIconProvider.notifier).state = oldData;
+  return oldData;
+});
 final selectedSortByProvider = StateProvider<SortBy>((ref) => SortBy.Memory);
 
 class TaskManagerScreen extends ConsumerWidget {
@@ -91,7 +109,9 @@ class TaskManagerScreen extends ConsumerWidget {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(left: 2.w),
-                          child: process.icon != null ? Image.memory(process.icon!, gaplessPlayback: true) : const Icon(FontAwesomeIcons.question),
+                          child: ref.read(processIconProvider)[process.name] != null
+                              ? Image.memory(ref.read(processIconProvider)[process.name]!, gaplessPlayback: true)
+                              : const Icon(FontAwesomeIcons.question),
                         ),
                         Text(process.name, style: Theme.of(context).textTheme.titleSmall),
                         Padding(

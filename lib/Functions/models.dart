@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 enum StorageType { SSD, HDD }
@@ -17,6 +18,16 @@ enum DataType { Hardwares, TaskManager }
 enum StreamDataType { FPS, DATA, RoomClients, DiskData }
 
 enum QrCodeSwitchState { camera, text }
+
+///this is solely used in home_screen for gpus widget
+class ComputerDataWithBuildContext {
+final ComputerData computerData;
+final BuildContext context;
+  ComputerDataWithBuildContext({
+    required this.computerData,
+    required this.context,
+  });
+}
 
 class StreamData {
   StreamDataType type;
@@ -97,7 +108,7 @@ class FpsTime {
 class ComputerSpecs {
   String motherboardName;
   String ramSize;
-  String gpuName;
+  List<String> gpusName;
   String cpuName;
 
   List<String> storages;
@@ -105,7 +116,7 @@ class ComputerSpecs {
   ComputerSpecs({
     required this.motherboardName,
     required this.ramSize,
-    required this.gpuName,
+    required this.gpusName,
     required this.cpuName,
     required this.storages,
     required this.monitors,
@@ -114,7 +125,7 @@ class ComputerSpecs {
     return ComputerSpecs(
       motherboardName: data.motherboard.name,
       ramSize: "${(data.ram.memoryAvailable + data.ram.memoryUsed).toStringAsFixed(2)}GB",
-      gpuName: data.gpu.name,
+      gpusName: data.gpus.map((e) => e.name).toList(),
       cpuName: data.cpu.name,
       storages: data.storages.map((e) => '${(e.size / 1000 / 1000 / 1000).round()} GB ${e.type.name}').toList(),
       monitors: data.monitors.map((e) => '${e.width} x ${e.height}${e.primary ? ' primary' : ''}').toList(),
@@ -126,7 +137,7 @@ class ComputerSpecs {
 
     result.addAll({'motherboardName': motherboardName});
     result.addAll({'ramSize': ramSize});
-    result.addAll({'gpuName': gpuName});
+    result.addAll({'gpusName': gpusName});
     result.addAll({'cpuName': cpuName});
     result.addAll({'storages': storages});
     result.addAll({'monitors': monitors});
@@ -138,7 +149,7 @@ class ComputerSpecs {
     return ComputerSpecs(
       motherboardName: map['motherboardName'] ?? '',
       ramSize: map['ramSize'] ?? '',
-      gpuName: map['gpuName'] ?? '',
+      gpusName: map['gpusName'] ?? '',
       cpuName: map['cpuName'] ?? '',
       storages: List<String>.from(map['storages']),
       monitors: List<String>.from(map['monitors']),
@@ -153,7 +164,7 @@ class ComputerSpecs {
 class ComputerData {
   late Ram ram;
   late Cpu cpu;
-  late Gpu gpu;
+  late List<Gpu> gpus;
   late List<Storage> storages;
   late List<Monitor> monitors;
   late Motherboard motherboard;
@@ -165,7 +176,7 @@ class ComputerData {
     final parsedData = jsonDecode(data.replaceAll("'", '"'));
     ram = Ram.fromMap(parsedData['ram']);
     cpu = Cpu.fromMap(parsedData['cpu']);
-    gpu = Gpu.fromMap(parsedData['gpu']);
+    gpus = List<Gpu>.from(List<Map<String, dynamic>>.from(parsedData['gpu']).map((e) => Gpu.fromMap(e)).toList());
     motherboard = Motherboard.fromMap(parsedData['motherboard']);
     battery = Battery.fromMap(parsedData['battery']);
     storages = Map<String, dynamic>.from(parsedData['storages']).entries.toList().map((e) => Storage.fromMap(e.key, e.value)).toList();
@@ -700,10 +711,12 @@ class Settings {
   bool personalizedAds;
   bool useCelcius;
   bool sendAnalaytics;
+  String? primaryGpuName;
   Settings({
     required this.personalizedAds,
     required this.useCelcius,
     required this.sendAnalaytics,
+    required this.primaryGpuName,
   });
 
   Map<String, dynamic> toMap() {
@@ -711,6 +724,7 @@ class Settings {
     result.addAll({'sendAnalaytics': sendAnalaytics});
     result.addAll({'personalizedAds': personalizedAds});
     result.addAll({'useCelcius': useCelcius});
+    result.addAll({'primaryGpuName': primaryGpuName});
 
     return result;
   }
@@ -720,6 +734,7 @@ class Settings {
       personalizedAds: map['personalizedAds'] ?? true,
       useCelcius: map['useCelcius'] ?? true,
       sendAnalaytics: map['sendAnalaytics'] ?? true,
+      primaryGpuName: map['primaryGpuName'],
     );
   }
 
@@ -727,11 +742,12 @@ class Settings {
 
   factory Settings.fromJson(String source) => Settings.fromMap(json.decode(source));
 
-  Settings copyWith({bool? personalizedAds, bool? useCelcius, bool? sendAnalaytics}) {
+  Settings copyWith({bool? personalizedAds, bool? useCelcius, bool? sendAnalaytics, String? primaryGpuName}) {
     return Settings(
       personalizedAds: personalizedAds ?? this.personalizedAds,
       useCelcius: useCelcius ?? this.useCelcius,
       sendAnalaytics: sendAnalaytics ?? this.sendAnalaytics,
+      primaryGpuName: primaryGpuName ?? this.primaryGpuName,
     );
   }
 

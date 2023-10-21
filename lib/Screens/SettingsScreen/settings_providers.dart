@@ -23,6 +23,11 @@ class SettingsNotifier extends AsyncNotifier<Settings> {
     saveSettings();
   }
 
+  updatePrimaryGpuName(String value) {
+    state = AsyncData(state.value!.copyWith(primaryGpuName: value));
+    saveSettings();
+  }
+
   updateSendAnalytics(bool value) {
     state = AsyncData(state.value!.copyWith(sendAnalaytics: value));
     saveSettings();

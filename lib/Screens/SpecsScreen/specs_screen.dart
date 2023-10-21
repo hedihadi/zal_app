@@ -45,7 +45,8 @@ class SpecsScreen extends ConsumerWidget {
                 height: 25,
               ),
               Icons.power,
-              data.gpu.name,
+              //TODO gpu
+              data.gpus[0].name,
               addSpacing: true,
             ),
             tableRow(

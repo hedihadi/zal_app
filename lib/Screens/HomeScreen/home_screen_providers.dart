@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:zal/Functions/models.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/AccountScreen/account_screen_providers.dart';
 import 'package:zal/Screens/LoginScreen/login_providers.dart';
+import 'package:zal/Screens/SettingsScreen/settings_providers.dart';
 
 class SocketNotifier extends AsyncNotifier<ComputerData> {
   bool isProgramRunningAsAdminstrator = true;
@@ -88,6 +90,29 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
     };
     data.addAll(extraQuery);
     ref.read(socketObjectProvider.notifier).state!.sendData("stress_test", jsonEncode(data));
+  }
+
+  ///TODO: calling this function within widgets causes a flash of error to occur because-
+  ///we're causing the provider to update itself, so we need to make a variable for primaryGpu
+  ///instead of calling a function to get it.
+  Gpu? getPrimaryGpu() {
+    final settings = ref.read(settingsProvider).value;
+    final gpus = state.value?.gpus;
+    if ([settings, gpus].contains(null) || gpus!.isEmpty) return null;
+    String? primaryGpuName = settings!.primaryGpuName;
+    if (primaryGpuName == null) {
+      //assign the first gpu as primary
+      ref.read(settingsProvider.notifier).updatePrimaryGpuName(gpus.first.name);
+      primaryGpuName = gpus.first.name;
+    }
+    //try to find the primary gpu. if we fail, we'll assign the first gpu as primary
+    final primaryGpu = gpus.firstWhereOrNull((element) => element.name == primaryGpuName);
+    if (primaryGpu == null) {
+      ref.read(settingsProvider.notifier).updatePrimaryGpuName(gpus.first.name);
+      return gpus.first;
+    } else {
+      return primaryGpu;
+    }
   }
 }
 

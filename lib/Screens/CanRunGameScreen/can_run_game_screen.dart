@@ -79,7 +79,8 @@ class ProceedButton extends ConsumerWidget {
                   'can_i_run_game',
                   jsonEncode([
                     selectedGame,
-                    'gpu:${data.gpu.name}, cpu: ${data.cpu.name}, ram: ${(data.ram.memoryAvailable + data.ram.memoryUsed).toSize(decimals: 0)}'
+                    ref.read(socketProvider.notifier).getPrimaryGpu()?.name,
+                    'gpu:${data.gpus[0].name}, cpu: ${data.cpu.name}, ram: ${(data.ram.memoryAvailable + data.ram.memoryUsed).toSize(decimals: 0)}'
                   ]));
               ref.read(isStreamLoadingProvider.notifier).state = true;
               AnalyticsManager.logEvent("can-run-game", options: {'game': selectedGame});

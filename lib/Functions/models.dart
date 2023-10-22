@@ -21,8 +21,8 @@ enum QrCodeSwitchState { camera, text }
 
 ///this is solely used in home_screen for gpus widget
 class ComputerDataWithBuildContext {
-final ComputerData computerData;
-final BuildContext context;
+  final ComputerData computerData;
+  final BuildContext context;
   ComputerDataWithBuildContext({
     required this.computerData,
     required this.context,
@@ -161,6 +161,26 @@ class ComputerSpecs {
   factory ComputerSpecs.fromJson(String source) => ComputerSpecs.fromMap(json.decode(source));
 }
 
+class NetworkSpeed {
+  ///in bytes
+  final int download;
+
+  ///in bytes
+  final int upload;
+
+  NetworkSpeed({
+    required this.download,
+    required this.upload,
+  });
+
+  factory NetworkSpeed.fromMap(Map<String, dynamic> map) {
+    return NetworkSpeed(
+      download: map['download']?.toInt() ?? 0,
+      upload: map['upload']?.toInt() ?? 0,
+    );
+  }
+}
+
 class ComputerData {
   late Ram ram;
   late Cpu cpu;
@@ -169,7 +189,9 @@ class ComputerData {
   late List<Monitor> monitors;
   late Motherboard motherboard;
   late Battery battery;
+  List<NetworkInterface>? networkInterfaces;
   List<TaskmanagerProcess>? taskmanagerProcesses;
+  late NetworkSpeed networkSpeed;
   ComputerData();
 
   ComputerData.construct(String data) {
@@ -186,7 +208,44 @@ class ComputerData {
       taskmanagerProcesses =
           Map<String, dynamic>.from(parsedData['taskmanager']).entries.toList().map((e) => TaskmanagerProcess.fromMap(e.key, e.value)).toList();
     }
+    if (parsedData.containsKey("networkInterface")) {
+      networkInterfaces = List<Map<String, dynamic>>.from(parsedData['networkInterface']).map((e) => NetworkInterface.fromMap(e)).toList();
+    }
+    networkSpeed = NetworkSpeed.fromMap(parsedData['networkSpeed']);
   }
+}
+
+class NetworkInterface {
+  final String name;
+  final String description;
+  final bool isEnabled;
+  final String id;
+  final int bytesSent;
+  final int bytesReceived;
+  final bool isPrimary;
+  NetworkInterface({
+    required this.name,
+    required this.description,
+    required this.isEnabled,
+    required this.id,
+    required this.bytesSent,
+    required this.bytesReceived,
+    required this.isPrimary,
+  });
+
+  factory NetworkInterface.fromMap(Map<String, dynamic> map) {
+    return NetworkInterface(
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      isEnabled: (map['status'] ?? "Down") != "Down",
+      id: map['id'] ?? '',
+      bytesSent: map['bytesSent']?.toInt() ?? 0,
+      bytesReceived: map['bytesReceived']?.toInt() ?? 0,
+      isPrimary: map['isPrimary'] ?? false,
+    );
+  }
+
+  factory NetworkInterface.fromJson(String source) => NetworkInterface.fromMap(json.decode(source));
 }
 
 class Battery {
@@ -526,8 +585,8 @@ class SocketObject {
   Timer? timer;
   SocketObject(String uid, String idToken) {
     socket = io(
-      'https://api.zalapp.com',
-      //'http://192.168.0.112:5000',
+      //'https://api.zalapp.com',
+      'http://192.168.0.112:5000',
       <String, dynamic>{
         'transports': ['websocket'],
         'query': {

@@ -3,19 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
 class CardWidget extends ConsumerWidget {
-  CardWidget(
-      {super.key,
-      required this.title,
-      required this.child,
-      this.titleIcon = const SizedBox(),
-      this.contentPadding,
-      this.titleFontSize,
-      this.titleIconAtRight = false});
+  CardWidget({
+    super.key,
+    required this.title,
+    required this.child,
+    this.titleIcon = const SizedBox(),
+    this.contentPadding,
+    this.titleFontSize,
+    this.titleIconAtRight = false,
+    this.titleContainerColor,
+  });
   final String title;
   final Widget child;
   final Widget titleIcon;
   final bool titleIconAtRight;
   final double? titleFontSize;
+  final Color? titleContainerColor;
   EdgeInsetsGeometry? contentPadding;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +30,8 @@ class CardWidget extends ConsumerWidget {
             elevation: 20,
             shadowColor: Colors.transparent,
             shape: const BeveledRectangleBorder(),
-            child: SizedBox(
+            child: Container(
+                color: titleContainerColor,
                 width: double.infinity,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h),

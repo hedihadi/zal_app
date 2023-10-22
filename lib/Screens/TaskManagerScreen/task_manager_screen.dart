@@ -124,7 +124,7 @@ class TaskManagerScreen extends ConsumerWidget {
                         IconButton(
                             onPressed: () async {
                               bool response = await showConfirmDialog(
-                                  'are you sure?', 'this process will be killed, destroyed, absolutely annihilated.', context);
+                                  'are you sure?', '${process.name} will be killed, destroyed, absolutely annihilated.', context);
                               if (response == false) return;
                               ref.read(socketObjectProvider.notifier).state!.sendData('kill_process', jsonEncode(process.pids));
                             },

@@ -62,14 +62,21 @@ class SettingsScreen extends ConsumerWidget {
                     itemCount: ref.watch(socketProvider).value!.gpus.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1.5),
                     itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 5,
-                        shadowColor: Colors.transparent,
-                        child: Center(
-                          child: Text(
-                            ref.read(socketProvider).value!.gpus[index].name,
-                            maxLines: 2,
-                            style: Theme.of(context).textTheme.titleLarge,
+                      final gpu = ref.read(socketProvider).value!.gpus[index];
+                      return GestureDetector(
+                        onTap: () {
+                          ref.read(settingsProvider.notifier).updatePrimaryGpuName(gpu.name);
+                        },
+                        child: Card(
+                          color: (settings?.primaryGpuName ?? "") == gpu.name ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+                          elevation: 5,
+                          shadowColor: Colors.transparent,
+                          child: Center(
+                            child: Text(
+                              gpu.name,
+                              maxLines: 2,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
                         ),
                       );

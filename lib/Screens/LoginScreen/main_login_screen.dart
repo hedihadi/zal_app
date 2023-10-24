@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zal/Functions/firebase_analytics_manager.dart';
+import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/LoginScreen/login_widget.dart';
 import 'package:zal/Screens/LoginScreen/sign_up_widget.dart';
 
@@ -26,17 +27,8 @@ class MainLoginScreen extends ConsumerWidget {
             Center(
                 child: TextButton(
                     onPressed: () async {
-                      AlertDialog alert = const AlertDialog(
-                        content: Text("an account is required to establish a secure connection between your mobile and your PC."),
-                      );
-
-                      // show the dialog
-                      await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alert;
-                        },
-                      );
+                      await showInformationDialog(
+                          null, "an account is required to establish a secure connection between your mobile and your PC.", context);
                     },
                     child: const Text("why do i need an Account?"))),
             Builder(

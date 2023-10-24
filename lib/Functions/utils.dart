@@ -131,7 +131,7 @@ class HexColor extends Color {
   }
 }
 
-Future<bool> showConfirmDialog(String title, String message, context, {bool showButtons = true}) async {
+Future<bool> showConfirmDialog(String title, String message, BuildContext context, {bool showButtons = true}) async {
   AlertDialog alert = AlertDialog(
     title: Text(title, style: GoogleFonts.bebasNeueTextTheme(AppTheme.darkTheme.textTheme).displayLarge),
     content: Text(message),
@@ -157,6 +157,21 @@ Future<bool> showConfirmDialog(String title, String message, context, {bool show
           true
       ? true
       : false;
+}
+
+Future<void> showInformationDialog(String? title, String message, BuildContext context) async {
+  AlertDialog alert = AlertDialog(
+    title: title == null ? null : Text(title),
+    content: Text(message),
+  );
+
+  // show the dialog
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 
 ///https://stackoverflow.com/questions/39735145/how-to-compress-a-string-using-gzip-or-similar-in-dart
@@ -207,22 +222,21 @@ String secondsToWrittenTime(int seconds) {
 }
 
 TableRow tableRow(BuildContext context, String title, IconData icon, String text,
-    {bool addSpacing = false, bool colorTitle = true, bool showIcon = true, Widget? customIcon}) {
+    {bool addSpacing = false, bool colorTitle = true, bool showIcon = true, Widget? customIcon, Widget? suffixIcon}) {
   final paddingHeight = 1.h;
   return TableRow(
     children: <Widget>[
       TableCell(
         verticalAlignment: TableCellVerticalAlignment.top,
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.only(top: paddingHeight / 2, bottom: paddingHeight / 2, right: addSpacing ? 2.w : 0),
-            child: Row(
-              children: [
-                showIcon ? (customIcon ?? Icon(icon, size: 2.h, color: colorTitle ? Theme.of(context).primaryColor : null)) : Container(),
-                SizedBox(width: 2.w),
-                Text(title, style: Theme.of(context).textTheme.labelMedium!.copyWith(color: colorTitle ? Theme.of(context).primaryColor : null)),
-              ],
-            ),
+        child: Padding(
+          padding: EdgeInsets.only(top: paddingHeight / 2, bottom: paddingHeight / 2, right: addSpacing ? 2.w : 0),
+          child: Row(
+            children: [
+              showIcon ? (customIcon ?? Icon(icon, size: 2.h, color: colorTitle ? Theme.of(context).primaryColor : null)) : Container(),
+              SizedBox(width: 2.w),
+              Text(title, style: Theme.of(context).textTheme.labelMedium!.copyWith(color: colorTitle ? Theme.of(context).primaryColor : null)),
+              suffixIcon ?? Container(),
+            ],
           ),
         ),
       ),

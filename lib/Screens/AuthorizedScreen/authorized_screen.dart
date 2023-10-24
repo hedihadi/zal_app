@@ -31,7 +31,6 @@ class AuthorizedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(interstitialAdProvider);
-    ref.read(processIconProvider);
     ref.read(screenViewProvider("authorized"));
 
     final index = ref.watch(bottomNavigationbarIndexProvider);

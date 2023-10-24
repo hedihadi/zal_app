@@ -8,6 +8,7 @@ import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/AccountScreen/account_screen_providers.dart';
 import 'package:zal/Screens/LoginScreen/login_providers.dart';
 import 'package:zal/Screens/SettingsScreen/settings_providers.dart';
+import 'package:zal/Screens/TaskManagerScreen/Widgets/taskmanager_table_widget.dart';
 
 class SocketNotifier extends AsyncNotifier<ComputerData> {
   bool isProgramRunningAsAdminstrator = true;
@@ -63,6 +64,9 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
             ref.read(computerSpecsProvider.notifier).saveSettings(data);
           }
           isComputerConnected = true;
+      
+          
+
           return data;
         } on Exception {
           throw ErrorParsingComputerData(streamData.data);

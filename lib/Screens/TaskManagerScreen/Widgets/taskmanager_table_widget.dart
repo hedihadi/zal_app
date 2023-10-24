@@ -14,8 +14,9 @@ final _processIconProvider = StateProvider<Map<String, Uint8List>>((ref) => {});
 
 //this provider subscribes to new data
 final processIconProvider = StateProvider<Map<String, Uint8List>>((ref) {
-  final oldData = ref.read(_processIconProvider);
   final socket = ref.watch(socketProvider);
+  final oldData = ref.read(_processIconProvider);
+
   if (socket.hasValue == false) return oldData;
   final processes = socket.value?.taskmanagerProcesses;
 
@@ -83,7 +84,11 @@ class TaskmanagerTableWidget extends ConsumerWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 2.w),
                     child: ref.read(processIconProvider)[process.name] != null
-                        ? Image.memory(ref.read(processIconProvider)[process.name]!, gaplessPlayback: true)
+                        ? Image.memory(
+                            ref.read(processIconProvider)[process.name]!,
+                            gaplessPlayback: true,
+                            scale: 0.5,
+                          )
                         : const Icon(FontAwesomeIcons.question),
                   ),
                   Text(process.name, style: Theme.of(context).textTheme.titleSmall),

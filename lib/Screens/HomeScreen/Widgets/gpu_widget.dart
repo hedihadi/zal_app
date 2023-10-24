@@ -27,7 +27,10 @@ class GpuWidget extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const GpuScreen())),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => GpuScreen(
+                          gpuName: primaryGpu.name,
+                        ))),
                 child: CardWidget(
                   title: "GPU",
                   titleIcon: Image.asset(

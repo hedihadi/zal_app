@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,14 +13,15 @@ import 'package:zal/Widgets/inline_ad.dart';
 import '../Functions/firebase_analytics_manager.dart';
 
 class GpuScreen extends ConsumerWidget {
-  const GpuScreen({super.key});
+  const GpuScreen({super.key, required this.gpuName});
+  final String gpuName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final computerSocket = ref.watch(socketProvider);
     ref.read(screenViewProvider("gpu"));
-    //TODO gpu
-    final gpu = computerSocket.value!.gpus[0];
+    final gpu = computerSocket.value!.gpus.firstWhereOrNull((element) => element.name == gpuName);
+    if (gpu == null) return const Text("gpu doesn't exist");
     return Scaffold(
       appBar: AppBar(title: const Text("GPU")),
       body: ListView(

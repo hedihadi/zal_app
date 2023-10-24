@@ -15,7 +15,7 @@ enum SortBy { Name, Memory, Cpu }
 
 enum DataType { Hardwares, TaskManager }
 
-enum StreamDataType { FPS, DATA, RoomClients, DiskData }
+enum StreamDataType { FPS, DATA, RoomClients, DiskData, InitialServerInformation }
 
 enum QrCodeSwitchState { camera, text }
 
@@ -586,7 +586,7 @@ class SocketObject {
   SocketObject(String uid, String idToken) {
     socket = io(
       //'https://api.zalapp.com',
-      'http://192.168.0.112:5000',
+      'http://192.168.0.107:5000',
       <String, dynamic>{
         'transports': ['websocket'],
         'query': {

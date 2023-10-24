@@ -13,6 +13,7 @@ import 'package:zal/Screens/HomeScreen/Widgets/ram_widget.dart';
 import 'package:zal/Screens/HomeScreen/Widgets/report_error_widget.dart';
 import 'package:zal/Screens/HomeScreen/Widgets/storage_widget.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
+import 'package:zal/Screens/MainScreen/main_screen_providers.dart';
 import 'package:zal/Widgets/inline_ad.dart';
 import 'package:zal/Widgets/staggered_gridview.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +24,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final socket = ref.watch(socketProvider);
+    ref.watch(shouldShowUpdateDialogProvider);
+
     return Center(
       child: socket.when(
         skipLoadingOnReload: true,

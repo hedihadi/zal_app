@@ -45,8 +45,7 @@ class SpecsScreen extends ConsumerWidget {
                 height: 25,
               ),
               Icons.power,
-              //TODO gpu
-              data.gpus[0].name,
+              "${ref.read(socketProvider.notifier).getPrimaryGpu()?.name}",
               addSpacing: true,
             ),
             tableRow(

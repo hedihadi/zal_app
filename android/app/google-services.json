@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "833574767925",
+    "firebase_url": "https://zal1-353509-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "zal1-353509",
     "storage_bucket": "zal1-353509.appspot.com"
   },
@@ -14,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "833574767925-qlakif91bqbf8o5u1oin564ojee3qlqr.apps.googleusercontent.com",
+          "client_id": "833574767925-1q5sfsm5sfuiftf8m07lan996qi7m8qj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,12 +28,13 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "833574767925-qlakif91bqbf8o5u1oin564ojee3qlqr.apps.googleusercontent.com",
+              "client_id": "833574767925-1q5sfsm5sfuiftf8m07lan996qi7m8qj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5545344389727160~8630810898"
     }
   ],
   "configuration_version": "1"

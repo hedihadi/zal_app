@@ -29,13 +29,14 @@ dependencies:
   file: ^6.1.4
   cloud_firestore: ^4.3.1
   path_provider: ^2.1.0
+  
   shared_preferences: ^2.0.9
   sizer: ^2.0.13
   firebase_analytics: ^10.1.0
   flex_color_scheme: ^7.0.1
   settings_ui: ^2.0.2
   dependency_validator: ^3.0.0
-  firebase_core: ^2.4.1
+  firebase_core: ^2.19.0
   pull_to_refresh: ^2.0.0
   package_info_plus: ^4.1.0
   upgrader: ^6.0.1
@@ -67,6 +68,8 @@ dependencies:
   timeago: ^3.3.0
   firebase_auth: ^4.9.0
   google_sign_in: ^6.1.5
+  firebase_database: ^10.3.1
+  flutter_dotenv: ^5.1.0
 dev_dependencies:
   flutter_lints: ^2.0.3
   flutter_test:
@@ -95,7 +98,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/icons/
-
+    - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

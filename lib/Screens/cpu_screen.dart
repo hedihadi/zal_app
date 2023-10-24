@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zal/Functions/models.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
+import 'package:zal/Widgets/heavy_processes_widget.dart';
 import 'package:zal/Widgets/inline_ad.dart';
 import 'package:zal/Widgets/staggered_gridview.dart';
 import 'package:sizer/sizer.dart';
@@ -171,7 +173,9 @@ class CpuScreen extends ConsumerWidget {
               },
             ),
           ),
-           InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
+          const Divider(),
+          const HeavyProcessesWidget(title:"these processes have the heavest load",sortBy: SortBy.Cpu),
+          InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
         ],
       ),
     );

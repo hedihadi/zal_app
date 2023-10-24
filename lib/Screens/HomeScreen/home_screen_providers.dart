@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -15,6 +14,7 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
   bool isConnected = false;
   bool isComputerConnected = false;
   List<StorageInfo> storageInfos = [];
+  int elpasedTime = 0;
   Future<ComputerData> _fetchData(String data) async {
     final computerData = ComputerData.construct(decompressGzip(data));
     return computerData;
@@ -34,8 +34,8 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
   Future<ComputerData> build() async {
     final socket = ref.watch(computerSocketStreamProvider);
     isConnected = ref.watch(isConnectedProvider);
-    if ((ref.read(timerProvider).value ?? 0) <= 3) {
-      ref.watch(timerProvider);
+    if (elpasedTime <= 3) {
+      elpasedTime = ref.watch(timerProvider).value ?? 0;
     }
     final streamData = socket.value;
     if (isConnected == false) {
@@ -48,6 +48,8 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
           return attemptToReturnOldData(ComputerOfflineException());
         }
         isComputerConnected = true;
+      } else if (streamData.type == StreamDataType.DiskData) {
+        _fetchDiskData(streamData.data);
       }
 
       if (streamData.type == StreamDataType.DATA) {
@@ -65,9 +67,10 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
         } on Exception {
           throw ErrorParsingComputerData(streamData.data);
         }
-      } else if (streamData.type == StreamDataType.DiskData) {
-        _fetchDiskData(streamData.data);
       }
+    }
+    if (isComputerConnected == false) {
+      return attemptToReturnOldData(ComputerOfflineException());
     }
     return attemptToReturnOldData(DataIsNullException());
   }
@@ -146,13 +149,16 @@ final computerSocketStreamProvider = StreamProvider<StreamData>((ref) async* {
       ref.read(isConnectedProvider.notifier).state = false;
       print("disconnected");
     });
-
+    socket.socket.on('initial_server_information', (data) {
+      stream.add(StreamData(type: StreamDataType.InitialServerInformation, data: data));
+    });
     socket.socket.on('fps_data', (data) {
       stream.add(StreamData(type: StreamDataType.FPS, data: data));
     });
     socket.socket.on('room_clients', (data) {
       stream.add(StreamData(type: StreamDataType.RoomClients, data: data));
     });
+
     socket.socket.on('disk_data', (data) {
       stream.add(StreamData(type: StreamDataType.DiskData, data: data));
     });

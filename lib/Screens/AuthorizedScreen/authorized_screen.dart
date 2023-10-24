@@ -12,6 +12,7 @@ import 'package:zal/Screens/HomeScreen/home_screen.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
 import 'package:zal/Screens/MainScreen/main_screen_providers.dart';
 import 'package:zal/Screens/SettingsScreen/settings_screen.dart';
+import 'package:zal/Screens/TaskManagerScreen/Widgets/taskmanager_table_widget.dart';
 import 'package:zal/Screens/TaskManagerScreen/task_manager_screen.dart';
 import 'package:zal/Widgets/stress_test_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +31,9 @@ class AuthorizedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(interstitialAdProvider);
+    ref.read(processIconProvider);
     ref.read(screenViewProvider("authorized"));
+
     final index = ref.watch(bottomNavigationbarIndexProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -152,7 +155,7 @@ class TaskmanagerButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final computerSocket = ref.watch(socketProvider);
+    ref.watch(socketProvider);
     if (ref.read(socketProvider.notifier).isProgramRunningAsAdminstrator) {
       return IconButton(
           onPressed: () {

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -19,7 +20,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   MobileAds.instance.initialize();
   Purchases.configure(_revenueCatConfiguration);
-
+  await dotenv.load(fileName: ".env");
   //for some reason this is needed to allow error printing
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;

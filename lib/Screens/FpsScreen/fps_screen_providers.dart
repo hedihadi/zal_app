@@ -14,6 +14,10 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
     for (final string in parsedData) {
       final parsedString = Map<String, dynamic>.from(jsonDecode(string)).entries.first;
       processName = parsedString.key;
+      if (state.value?.processName != processName) {
+        //this is a new process, let's reset
+        reset();
+      }
       final msBetweenDisplayChange = double.parse(parsedString.value);
       fpsData.fpsList.add((1000 / msBetweenDisplayChange).toPrecision(2));
     }

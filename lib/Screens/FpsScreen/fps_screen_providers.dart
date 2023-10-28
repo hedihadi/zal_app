@@ -79,7 +79,7 @@ class FpsRecordsNotifier extends StateNotifier<List<FpsRecord>> {
   FpsRecordsNotifier({required this.ref}) : super([]);
   void addPreset(FpsData fpsData, String presetName, String? note) {
     state = [
-      FpsRecord(fpsData: fpsData, presetDuration: formatTime((ref.read(fpsTimeElapsedProvider)).round()), presetName: presetName, note: note),
+      FpsRecord(fpsData: fpsData, presetDuration: formatTime((ref.read(fpsTimeElapsedProvider)).value), presetName: presetName, note: note),
       ...state,
     ];
   }

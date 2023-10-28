@@ -43,7 +43,7 @@ class SpecsWidget extends ConsumerWidget {
                 height: 25,
               ),
               Icons.power,
-              data.gpusName.map((e) => "$e\n").toString(),
+              data.gpusName.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '\n'),
               addSpacing: true,
             ),
             tableRow(
@@ -102,25 +102,24 @@ class SpecsWidget extends ConsumerWidget {
                 controller: screenshotController,
                 child: table,
               ),
-              //Center(
-              //  child: ElevatedButton.icon(
-              //      onPressed: () {
-              //        screenshotController.captureFromWidget(table).then((capturedImage) async {
-              //          //save the image
-              //          final result = await ImageGallerySaver.saveImage(capturedImage, quality: 100, name: "${DateTime.now().toString()}");
-              //          ScaffoldMessenger.of(context)
-              //            ..hideCurrentSnackBar()
-              //            ..showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, showCloseIcon: true, content: Text('screenshot saved!')));
-              //        });
-              //      },
-              //      icon: Icon(FontAwesomeIcons.image),
-              //      label: Text('take Screenshot')),
-              //)
+              Center(
+                child: ElevatedButton.icon(
+                    onPressed: () {
+                      screenshotController.captureFromWidget(table).then((capturedImage) async {
+                        //save the image
+                        showSnackbar("took!", context);
+                      });
+                    },
+                    icon: const Icon(FontAwesomeIcons.image),
+                    label: const Text('take Screenshot')),
+              )
             ],
           ),
         );
       },
       error: (error, stackTrace) {
+        print(error);
+        print(stackTrace);
         return Container();
       },
       loading: () => const CircularProgressIndicator(),

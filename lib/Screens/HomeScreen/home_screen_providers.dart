@@ -7,6 +7,7 @@ import 'package:zal/Functions/models.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/AccountScreen/account_screen_providers.dart';
 import 'package:zal/Screens/LoginScreen/login_providers.dart';
+import 'package:zal/Screens/MainScreen/main_screen_providers.dart';
 import 'package:zal/Screens/SettingsScreen/settings_providers.dart';
 
 class SocketNotifier extends AsyncNotifier<ComputerData> {
@@ -45,9 +46,12 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
       if (streamData.type == StreamDataType.RoomClients) {
         if (List<int>.from(streamData.data).contains(0) == false) {
           isComputerConnected = false;
+          showSnackbarLocal("Computer Disconnected");
+
           return attemptToReturnOldData(ComputerOfflineException());
         }
         isComputerConnected = true;
+        showSnackbarLocal("Computer Connected");
       } else if (streamData.type == StreamDataType.DiskData) {
         _fetchDiskData(streamData.data);
       }
@@ -74,6 +78,11 @@ class SocketNotifier extends AsyncNotifier<ComputerData> {
       return attemptToReturnOldData(ComputerOfflineException());
     }
     return attemptToReturnOldData(DataIsNullException());
+  }
+
+  showSnackbarLocal(String text) {
+    final context = ref.read(contextProvider);
+    if (context != null) showSnackbar(text, context);
   }
 
   ComputerData attemptToReturnOldData(Exception ifNull) {
@@ -137,6 +146,11 @@ final isConnectedProvider = StateProvider<bool>((ref) => false);
 
 final computerSocketStreamProvider = StreamProvider<StreamData>((ref) async* {
   StreamController stream = StreamController();
+  showSnackbarLocal(String text) {
+    final context = ref.read(contextProvider);
+    if (context != null) showSnackbar(text, context);
+  }
+
   final socket = ref.watch(socketObjectProvider);
   if (socket != null) {
     socket.socket.on('pc_data', (data) {
@@ -145,10 +159,12 @@ final computerSocketStreamProvider = StreamProvider<StreamData>((ref) async* {
     socket.socket.onConnect((data) {
       ref.read(isConnectedProvider.notifier).state = true;
       print("connected");
+      showSnackbarLocal("Server Connected");
     });
     socket.socket.onDisconnect((data) {
       ref.read(isConnectedProvider.notifier).state = false;
       print("disconnected");
+      showSnackbarLocal("Server Disconnected");
     });
 
     socket.socket.on('fps_data', (data) {

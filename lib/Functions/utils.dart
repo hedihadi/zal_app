@@ -276,3 +276,15 @@ Future<bool> isUserUsingAdblock() async {
     return true;
   }
 }
+
+void showSnackbar(String text, BuildContext context) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(text),
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+}

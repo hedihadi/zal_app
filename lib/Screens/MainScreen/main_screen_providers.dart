@@ -9,7 +9,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zal/Functions/theme.dart';
-
 import '../HomeScreen/home_screen_providers.dart';
 
 class IsUserPremiumNotifier extends StateNotifier<bool> {
@@ -71,3 +70,4 @@ final shouldShowUpdateDialogProvider = FutureProvider((ref) async {
   }
   return true;
 });
+

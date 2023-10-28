@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -141,7 +140,7 @@ class ComputerSpecs {
     return ComputerSpecs(
       motherboardName: map['motherboardName'] ?? '',
       ramSize: map['ramSize'] ?? '',
-      gpusName: map['gpusName'] ?? '',
+      gpusName: List<String>.from(map['gpusName']) ?? [],
       cpuName: map['cpuName'] ?? '',
       storages: List<String>.from(map['storages']),
       monitors: List<String>.from(map['monitors']),
@@ -591,11 +590,11 @@ class SocketObject {
     );
 
     socket.on('connection', (_) {
-      print('connect ${_.toString()}');
+      print(
+        'connect ${_.toString()}');
     });
-    socket.on('connect_error', (_) {
-      var a = _.message.toString();
-      print('error ${_.toString()}');
+    socket.on('connect_error', (a) {
+      print('error $a');
     });
     socket.onConnect((_) {
       //join the room

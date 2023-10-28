@@ -46,7 +46,7 @@ class SaveFpsWidget extends ConsumerWidget {
                 final value = ref.read(fpsDataProvider).value;
                 if (value == null) return;
                 ref
-                    .read(fpsPresetsProvider.notifier)
+                    .read(fpsRecordsProvider.notifier)
                     .addPreset(value, presetNameController.text, noteController.text == '' ? null : noteController.text);
                 Navigator.of(context).pop();
                 ref.read(fpsDataProvider.notifier).reset();

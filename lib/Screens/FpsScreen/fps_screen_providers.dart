@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:screenshot/screenshot.dart';
@@ -16,11 +15,7 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
       final parsedString = Map<String, dynamic>.from(jsonDecode(string)).entries.first;
       processName = parsedString.key;
       final msBetweenDisplayChange = double.parse(parsedString.value);
-      if (fpsData.chosenProcessName != null && fpsData.chosenProcessName == processName) {
-        fpsData.fpsList.add((1000 / msBetweenDisplayChange).toPrecision(2));
-      } else {
-        fpsData.fpsList.add((1000 / msBetweenDisplayChange).toPrecision(2));
-      }
+      fpsData.fpsList.add((1000 / msBetweenDisplayChange).toPrecision(2));
     }
     fpsData.fpsList.sort((a, b) => a.compareTo(b));
     double fps1Percent = calculatePercentile(fpsData.fpsList, 0.01);
@@ -35,7 +30,8 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
   }
 
   void reset() {
-    state = AsyncData(state.value!.copyWith(fpsList: [], fps: 0, fps001Low: 0, fps01Low: 0, timestamp: Timestamp.now()));
+    ref.read(fpsTimeElapsedProvider.notifier).stopwatch = Stopwatch()..start();
+    state = AsyncData(state.value!.copyWith(fpsList: [], fps: 0, fps001Low: 0, fps01Low: 0));
   }
 
   double calculatePercentile(List<double> data, double percentile) {
@@ -53,22 +49,20 @@ class FpsDataNotifier extends AutoDisposeAsyncNotifier<FpsData> {
   Future<FpsData> build() async {
     final socket = ref.watch(computerSocketStreamProvider);
     final streamData = socket.value;
+    final isFpsPaused = ref.watch(isFpsPausedProvider);
     final FpsData fpsData = state.value ??
         FpsData(
           processName: null,
-          chosenProcessName: null,
           fpsList: [],
           fps: 0,
           fps01Low: 0,
           fps001Low: 0,
-          timestamp: Timestamp.now(),
         );
 
-    if (streamData!.type != StreamDataType.FPS) {
-      return state.value ?? fpsData;
+    if (isFpsPaused == false && streamData?.type == StreamDataType.FPS) {
+      return _fetchData(fpsData, streamData!.data);
     }
-
-    return _fetchData(fpsData, streamData.data);
+    return state.value ?? fpsData;
   }
 }
 
@@ -76,24 +70,43 @@ final fpsDataProvider = AsyncNotifierProvider.autoDispose<FpsDataNotifier, FpsDa
   return FpsDataNotifier();
 });
 
-class FpsRecordsNotifier extends StateNotifier<List<FpsPreset>> {
-  FpsRecordsNotifier() : super([]);
+class FpsRecordsNotifier extends StateNotifier<List<FpsRecord>> {
+  dynamic ref;
+  FpsRecordsNotifier({required this.ref}) : super([]);
   void addPreset(FpsData fpsData, String presetName, String? note) {
     state = [
-      FpsPreset(
-          fpsData: fpsData,
-          presetDuration: formatTime(((Timestamp.now().millisecondsSinceEpoch - fpsData.timestamp.millisecondsSinceEpoch) / 1000).round()),
-          presetName: presetName,
-          note: note),
+      FpsRecord(fpsData: fpsData, presetDuration: formatTime((ref.read(fpsTimeElapsedProvider)).round()), presetName: presetName, note: note),
       ...state,
     ];
   }
 
-  void removePreset(FpsPreset fpsPreset) {
-    state = state.where((element) => element != fpsPreset).toList();
+  void removePreset(FpsRecord fpsRecord) {
+    state = state.where((element) => element != fpsRecord).toList();
   }
 }
 
-final fpsPresetsProvider = StateNotifierProvider<FpsRecordsNotifier, List<FpsPreset>>((ref) {
-  return FpsRecordsNotifier();
+final fpsRecordsProvider = StateNotifierProvider<FpsRecordsNotifier, List<FpsRecord>>((ref) {
+  return FpsRecordsNotifier(ref: ref);
+});
+
+final isFpsPausedProvider = StateProvider<bool>((ref) => false);
+
+class FpsTimeElapsedNotifier extends AutoDisposeAsyncNotifier<int> {
+  Stopwatch stopwatch = Stopwatch()..start();
+  @override
+  Future<int> build() async {
+    //subscribe to this timer to update this provider every 1 second
+    ref.watch(timerProvider);
+    final isFpsPaused = ref.watch(isFpsPausedProvider);
+    if (isFpsPaused) {
+      stopwatch.stop();
+    } else {
+      stopwatch.start();
+    }
+    return stopwatch.elapsed.inSeconds;
+  }
+}
+
+final fpsTimeElapsedProvider = AsyncNotifierProvider.autoDispose<FpsTimeElapsedNotifier, int>(() {
+  return FpsTimeElapsedNotifier();
 });

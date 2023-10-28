@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/FpsScreen/Widgets/chart.dart';
 import 'package:zal/Screens/FpsScreen/Widgets/fps_help_widget.dart';
-import 'package:zal/Screens/FpsScreen/Widgets/fps_presets_widget.dart';
+import 'package:zal/Screens/FpsScreen/Widgets/fps_records_widget.dart';
 import 'package:zal/Screens/FpsScreen/Widgets/save_fps_widget.dart';
 import 'package:zal/Screens/FpsScreen/fps_screen_providers.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
@@ -53,10 +52,7 @@ class FpsScreen extends ConsumerWidget {
                     child: Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        Text(
-                          formatTime(((Timestamp.now().millisecondsSinceEpoch - data.timestamp.millisecondsSinceEpoch) / 1000).round()),
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
+                        const ElpasedTimeWidget(),
                         Column(
                           children: [
                             Row(
@@ -111,6 +107,7 @@ class FpsScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SaveFpsWidget(),
+                                const PauseFpsButton(),
                                 IconButton(
                                   onPressed: () {
                                     ref.read(fpsDataProvider.notifier).reset();
@@ -134,7 +131,7 @@ class FpsScreen extends ConsumerWidget {
                   ),
                 ),
                 const FpsPresetsWidget(),
-           InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
+                InlineAd(adUnit: Platform.isAndroid ? "ca-app-pub-5545344389727160/7822053264" : "ca-app-pub-5545344389727160/7748436032"),
               ],
             );
           },
@@ -146,6 +143,34 @@ class FpsScreen extends ConsumerWidget {
           loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
+    );
+  }
+}
+
+class PauseFpsButton extends ConsumerWidget {
+  const PauseFpsButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPaused = ref.watch(isFpsPausedProvider);
+    return IconButton(
+      onPressed: () {
+        ref.read(isFpsPausedProvider.notifier).state = !isPaused;
+      },
+      icon: Icon(isPaused ? FontAwesomeIcons.play : FontAwesomeIcons.pause),
+    );
+  }
+}
+
+class ElpasedTimeWidget extends ConsumerWidget {
+  const ElpasedTimeWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stopwatch = ref.watch(fpsTimeElapsedProvider);
+    return Text(
+      formatTime(stopwatch.value ?? 0),
+      style: Theme.of(context).textTheme.labelMedium,
     );
   }
 }

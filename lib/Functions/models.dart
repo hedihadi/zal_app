@@ -576,8 +576,8 @@ class SocketObject {
   Timer? timer;
   SocketObject(String uid, String idToken) {
     socket = io(
-      //'https://api.zalapp.com',
-      'http://192.168.0.107:5000',
+      'https://api.zalapp.com',
+      //'http://192.168.0.107:5000',
       <String, dynamic>{
         'transports': ['websocket'],
         'query': {
@@ -590,8 +590,7 @@ class SocketObject {
     );
 
     socket.on('connection', (_) {
-      print(
-        'connect ${_.toString()}');
+      print('connect ${_.toString()}');
     });
     socket.on('connect_error', (a) {
       print('error $a');

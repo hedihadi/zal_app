@@ -102,17 +102,17 @@ class SpecsWidget extends ConsumerWidget {
                 controller: screenshotController,
                 child: table,
               ),
-              Center(
-                child: ElevatedButton.icon(
-                    onPressed: () {
-                      screenshotController.captureFromWidget(table).then((capturedImage) async {
-                        //save the image
-                        showSnackbar("took!", context);
-                      });
-                    },
-                    icon: const Icon(FontAwesomeIcons.image),
-                    label: const Text('take Screenshot')),
-              )
+              // Center(
+              //   child: ElevatedButton.icon(
+              //       onPressed: () {
+              //         screenshotController.captureFromWidget(table).then((capturedImage) async {
+              //           //save the image
+              //           showSnackbar("took!", context);
+              //         });
+              //       },
+              //       icon: const Icon(FontAwesomeIcons.image),
+              //       label: const Text('take Screenshot')),
+              // )
             ],
           ),
         );

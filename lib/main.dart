@@ -11,13 +11,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:upgrader/upgrader.dart';
 import 'package:zal/Screens/MainScreen/main_screen.dart';
+import 'package:zal/firebase_options.dart';
 import 'Functions/theme.dart';
 
 final _revenueCatConfiguration = PurchasesConfiguration(Platform.isAndroid ? 'goog_xokAwGykaqKIgLAIODrNHTTMnxF' : 'appl_eqiIImrSxvAweggWipqxMOgYidj');
 Future<void> main() async {
   //initializations
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: Platform.isAndroid ? DefaultFirebaseOptions.android : DefaultFirebaseOptions.ios);
   MobileAds.instance.initialize();
   Purchases.configure(_revenueCatConfiguration);
   await dotenv.load(fileName: ".env");

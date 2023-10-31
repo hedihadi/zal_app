@@ -7,8 +7,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:sizer/sizer.dart';
 
 class SpecsWidget extends ConsumerWidget {
-  SpecsWidget({super.key});
-  ScreenshotController screenshotController = ScreenshotController();
+  const SpecsWidget({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final computerSpecs = ref.watch(computerSpecsProvider);
@@ -97,11 +96,12 @@ class SpecsWidget extends ConsumerWidget {
           child: ListView(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            children: [
-              Screenshot(
-                controller: screenshotController,
-                child: table,
-              ),
+            children:  [
+              table,
+              //Screenshot(
+              //  controller: screenshotController,
+              //  child: table,
+              //),
               // Center(
               //   child: ElevatedButton.icon(
               //       onPressed: () {
@@ -120,7 +120,7 @@ class SpecsWidget extends ConsumerWidget {
       error: (error, stackTrace) {
         print(error);
         print(stackTrace);
-        return Container();
+        return Text("$error");
       },
       loading: () => const CircularProgressIndicator(),
     );

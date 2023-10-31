@@ -138,11 +138,7 @@ class BuyPremiumWidget extends ConsumerWidget {
               ],
             ),
             const Spacer(),
-            const Row(
-              children: [
-                RestorePurchasesButton(),
-              ],
-            ),
+            const RestorePurchasesButton(),
           ],
         ),
       ),
@@ -169,8 +165,18 @@ class BenefitCard extends ConsumerWidget {
     );
   }
 }
+final isrestorePurchaseFirstRunProvider=AutoDisposeStateProvider<bool>((ref){
+  return true;
+});
+final restorePurchaseProvider = FutureProvider.autoDispose<bool>((ref) async {
+  if(ref.read(isrestorePurchaseFirstRunProvider)==true){
+    await Future.delayed(const Duration(milliseconds: 500), () {
+ref.read(isrestorePurchaseFirstRunProvider.notifier).state=false;
 
-final restorePurchaseProvider = FutureProvider<bool>((ref) async {
+});
+    
+    return true;
+  }
   await Future.delayed(const Duration(seconds: 5));
   await Purchases.restorePurchases();
   return true;
@@ -189,7 +195,7 @@ class RestorePurchasesButton extends ConsumerWidget {
       child: restorePurchases.when(
         skipLoadingOnRefresh: false,
         data: (data) => restorePurchases.isLoading ? const CircularProgressIndicator() : const Text("Restore Purchases"),
-        error: (error, stackTrace) => Text(error.toString()),
+        error: (error, stackTrace) => Text(error.toString(),maxLines: 5),
         loading: () => const CircularProgressIndicator(),
       ),
     );

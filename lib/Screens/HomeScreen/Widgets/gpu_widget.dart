@@ -26,6 +26,7 @@ class GpuWidget extends ConsumerWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+
               GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => GpuScreen(

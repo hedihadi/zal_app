@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "steamdb",
+            "name": "zal",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "steamdb (profile mode)",
+            "name": "zal (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "steamdb (release mode)",
+            "name": "zal (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

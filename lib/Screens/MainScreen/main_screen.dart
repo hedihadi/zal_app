@@ -12,7 +12,6 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
-    ref.read(shouldShowUpdateDialogProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(contextProvider.notifier).state = context);
     if (auth.hasValue == false) {

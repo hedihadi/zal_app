@@ -119,6 +119,7 @@ class SpecsWidget extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         print(error);
+        
         print(stackTrace);
         return Text("$error");
       },

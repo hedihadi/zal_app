@@ -116,7 +116,7 @@ class AuthorizedDrawer extends StatelessWidget {
             ListTile(
               title: const Text('Settings'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  SettingsScreen()));
               },
             ),
             ListTile(

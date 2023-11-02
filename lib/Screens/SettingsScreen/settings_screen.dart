@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zal/Functions/SettingsUI/section_setting_ui.dart';
 import 'package:zal/Functions/SettingsUI/switch_setting_ui.dart';
 import 'package:zal/Functions/firebase_analytics_manager.dart';
+import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
 import 'package:zal/Screens/LoginScreen/login_providers.dart';
 import 'package:zal/Screens/SettingsScreen/settings_providers.dart';
@@ -13,8 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 final revenueCatIdProvider = FutureProvider((ref) => Purchases.appUserID);
 
 class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key});
-
+  SettingsScreen({super.key});
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(screenViewProvider("settings"));
@@ -59,6 +61,7 @@ class SettingsScreen extends ConsumerWidget {
                   const Text("Select your primary GPU"),
                   GridView.builder(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: ref.watch(socketProvider).value!.gpus.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1.5),
                     itemBuilder: (context, index) {
@@ -85,6 +88,73 @@ class SettingsScreen extends ConsumerWidget {
                 ]),
           //MISC
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton.icon(onPressed: () => FirebaseAuth.instance.signOut(), icon: const Icon(Icons.logout), label: const Text("Sign out")),
+              TextButton.icon(
+                  onPressed: () async {
+                    final response =
+                        await showConfirmDialog("Delete Account", "your account will be permanently deleted, you cannot undo this!", context);
+                    if (response == true) {
+                      AlertDialog alert = AlertDialog(
+                        title: const Text("enter your Password"),
+                        content: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text("provide your current password to delete your account"),
+                            TextField(
+                              controller: passwordController,
+                              obscureText: true,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              decoration: const InputDecoration(
+                                labelText: 'Password',
+                                isDense: true,
+                              ),
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            child: const Text("Delete my Account"),
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                        ],
+                      );
+
+                      // show the dialog
+                      final response1 = (await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return alert;
+                                },
+                              )) ==
+                              true
+                          ? true
+                          : false;
+                      if (response1 == true) {
+                        await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser?.email ?? "", password: passwordController.text);
+                        await FirebaseAuth.instance.currentUser?.delete();
+                        await FirebaseAuth.instance.signOut();
+                        ref.invalidate(authProvider);
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.delete),
+                  label: const Text("Delete Account")),
+            ],
+          ),
+          SectionSettingUi(
+            children: [
+              Text("Purchases ID:\n${ref.watch(revenueCatIdProvider).value}"),
+              Text("UID:\n${ref.watch(authProvider).value!.uid}"),
+            ],
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               TextButton(
@@ -103,12 +173,6 @@ class SettingsScreen extends ConsumerWidget {
                 },
                 child: const Text("TOS"),
               ),
-            ],
-          ),
-          SectionSettingUi(
-            children: [
-              Text("Purchases ID:\n${ref.watch(revenueCatIdProvider).value}"),
-              Text("UID:\n${ref.watch(authProvider).value!.uid}"),
             ],
           ),
         ],

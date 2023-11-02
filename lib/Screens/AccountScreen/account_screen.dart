@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,14 +39,6 @@ class AccountScreen extends ConsumerWidget {
             const ChangeNameWidget(),
           ],
         ),
-        SizedBox(height: 2.h),
-        Row(
-          children: [
-            const Spacer(),
-            TextButton.icon(onPressed: () => FirebaseAuth.instance.signOut(), icon: const Icon(Icons.logout), label: const Text("Sign out")),
-            const Spacer(),
-          ],
-        ),
         const Divider(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -57,13 +48,13 @@ class AccountScreen extends ConsumerWidget {
               Text("My Rig", style: Theme.of(context).textTheme.titleLarge),
               IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
                   },
                   icon: const Icon(FontAwesomeIcons.gear)),
             ],
           ),
         ),
-        Card(child: SpecsWidget()),
+        const Card(child: SpecsWidget()),
         Card(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
@@ -128,13 +119,13 @@ class AuthorizedDrawer extends StatelessWidget {
             ListTile(
               title: const Text('Settings'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
               },
             ),
             ListTile(
               title: const Text('Account'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
               },
             ),
             ListTile(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zal/Functions/firebase_analytics_manager.dart';
 import 'package:zal/Functions/utils.dart';
+import 'package:zal/Screens/LoginScreen/Widgets/forgot_password_button.dart';
 import 'package:zal/Screens/LoginScreen/login_widget.dart';
 import 'package:zal/Screens/LoginScreen/sign_up_widget.dart';
 
@@ -36,14 +37,21 @@ class MainLoginScreen extends ConsumerWidget {
                 return ref.watch(isCreatingAccountProvider) ? SignupWidget() : LoginWidget();
               },
             ),
-            isConnecting
-                ? Container()
-                : TextButton.icon(
-                    onPressed: () {
-                      ref.read(isCreatingAccountProvider.notifier).state = !ref.read(isCreatingAccountProvider);
-                    },
-                    icon: Container(),
-                    label: Text(ref.watch(isCreatingAccountProvider) ? "Login instead" : "Create an Account")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                isConnecting
+                    ? Container()
+                    : TextButton.icon(
+                        onPressed: () {
+                          ref.read(isCreatingAccountProvider.notifier).state = !ref.read(isCreatingAccountProvider);
+                        },
+                        icon: Container(),
+                        label: Text(ref.watch(isCreatingAccountProvider) ? "Login instead" : "Create an Account")),
+                const Text("|"),
+                ForgotPasswordButton(),
+              ],
+            )
           ],
         ),
       ),

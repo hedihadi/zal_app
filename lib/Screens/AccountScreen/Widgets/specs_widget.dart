@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zal/Functions/utils.dart';
 import 'package:zal/Screens/AccountScreen/account_screen_providers.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:sizer/sizer.dart';
 
 class SpecsWidget extends ConsumerWidget {

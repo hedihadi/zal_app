@@ -158,7 +158,9 @@ Future<bool> showConfirmDialog(String title, String message, BuildContext contex
       ? true
       : false;
 }
-
+extension Ex on double {
+  double toPrecision(int n) => double.parse(toStringAsFixed(n));
+}
 Future<void> showInformationDialog(String? title, String message, BuildContext context) async {
   AlertDialog alert = AlertDialog(
     title: title == null ? null : Text(title),

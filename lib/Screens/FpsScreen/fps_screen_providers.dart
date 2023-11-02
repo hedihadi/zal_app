@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zal/Functions/utils.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:zal/Screens/HomeScreen/home_screen_providers.dart';
 import '../../Functions/models.dart';
 
